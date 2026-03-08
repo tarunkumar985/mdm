@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="004-ai-results" author="founder">
+
+        <createTable tableName="ai_results">
+            <column name="id" type="BIGSERIAL">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="meal_upload_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="face_count" type="INT">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="hygiene_risk" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- PostgreSQL array type -->
+            <column name="risk_flags" type="TEXT[]"/>
+
+            <column name="processed_at" type="TIMESTAMPTZ"
+                    defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- FK: ai_results.meal_upload_id → meal_uploads.id -->
+        <addForeignKeyConstraint
+                constraintName="fk_ai_results_meal_upload"
+                baseTableName="ai_results"
+                baseColumnNames="meal_upload_id"
+                referencedTableName="meal_uploads"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+        <!-- CHECK constraint via SQL (Liquibase-version safe) -->
+        <sql>
+            ALTER TABLE ai_results
+            ADD CONSTRAINT chk_ai_results_hygiene_risk
+            CHECK (hygiene_risk IN ('LOW','MEDIUM','HIGH'));
+        </sql>
+
+    </changeSet>
+
+</databaseChangeLog>

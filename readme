@@ -1,0 +1,61 @@
+psql -U postgres
+
+password=test123
+
+CREATE DATABASE mdm_db;
+
+CREATE USER mdm_user WITH PASSWORD 'test123';
+
+GRANT ALL PRIVILEGES ON DATABASE mdm_db TO mdm_user;
+
+ALTER DATABASE mdm_db OWNER TO mdm_user;
+
+---------------------------------------------
+
+✅ Create SCHOOL user (by OFFICER or ADMIN)
+POST /api/users
+Authorization: Bearer <JWT>
+
+{
+  "username": "school_101",
+  "password": "Welcome@123",
+  "role": "SCHOOL",
+  "schoolId": 101
+}
+✅ Create OFFICER (ADMIN only)
+POST /api/users
+Authorization: Bearer <ADMIN_JWT>
+
+{
+  "username": "block_officer_5",
+  "password": "Strong@123",
+  "role": "OFFICER"
+}
+❌ OFFICER trying to create OFFICER (BLOCKED)
+POST /api/users
+Authorization: Bearer <OFFICER_JWT>
+
+{
+  "username": "new_officer",
+  "password": "123",
+  "role": "OFFICER"
+}
+
+➡️ 403 Access Denied
+
+
+
+--------------------
+Admin account liquibase se create hoga:
+
+ <column name="username" value="admin"/>
+            <column name="password_hash"
+                    value="$2a$10$V3h7NwR9F3vZQq5J8XxQXe4MZC9y7LkZB6Pz5M0rQnY2Dk8JZfH2a"/>
+            <column name="role" value="ADMIN"/>
+username : admin
+password: Admin@123
+ROLE: ADMIN
+
+
+BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+System.out.println(encoder.encode("Admin@123"));

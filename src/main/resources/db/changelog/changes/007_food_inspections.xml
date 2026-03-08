@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+   
+  <changeSet id="007-food-inspections" author="founder">
+
+        <createTable tableName="food_inspections">
+            <column name="id" type="BIGSERIAL">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="school_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="meal_upload_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="inspector_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="inspection_date" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="food_quality" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="hygiene_observed" type="BOOLEAN">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="utensils_clean" type="BOOLEAN">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="kitchen_clean" type="BOOLEAN">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="inspection_notes" type="TEXT"/>
+
+            <column name="action_required" type="BOOLEAN"
+                    defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="action_details" type="TEXT"/>
+
+            <column name="created_at" type="TIMESTAMPTZ"
+                    defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- FK: food_inspections.school_id → schools.id -->
+        <addForeignKeyConstraint
+                constraintName="fk_food_inspections_school"
+                baseTableName="food_inspections"
+                baseColumnNames="school_id"
+                referencedTableName="schools"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+        <!-- FK: food_inspections.meal_upload_id → meal_uploads.id -->
+        <addForeignKeyConstraint
+                constraintName="fk_food_inspections_meal_upload"
+                baseTableName="food_inspections"
+                baseColumnNames="meal_upload_id"
+                referencedTableName="meal_uploads"
+                referencedColumnNames="id"
+                onDelete="SET NULL"/>
+
+        <!-- FK: food_inspections.inspector_id → users.id -->
+        <addForeignKeyConstraint
+                constraintName="fk_food_inspections_inspector"
+                baseTableName="food_inspections"
+                baseColumnNames="inspector_id"
+                referencedTableName="users"
+                referencedColumnNames="id"
+                onDelete="SET NULL"/>
+
+        <!-- CHECK constraint via SQL (Liquibase-version safe) -->
+        <sql>
+            ALTER TABLE food_inspections
+            ADD CONSTRAINT chk_food_inspections_quality
+            CHECK (food_quality IN ('GOOD','AVERAGE','POOR'));
+        </sql>
+
+    </changeSet>
+
+</databaseChangeLog>

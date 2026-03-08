@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+
+
+    <include file="db/changelog/changes/001_create_schools.xml"/>
+    <include file="db/changelog/changes/002_create_users.xml"/>
+    <include file="db/changelog/changes/003_meal_uploads.xml"/>
+    <include file="db/changelog/changes/004_ai_results.xml"/>
+    <include file="db/changelog/changes/005_alerts.xml"/>
+    <include file="db/changelog/changes/006_daily_reports.xml"/>
+    <include file="db/changelog/changes/007_food_inspections.xml"/>
+    <include file="db/changelog/changes/008_face_embeddings.xml"/>
+	<include file="db/changelog/changes/009_audit_logs.xml"/>
+	<include file="db/changelog/changes/010_refresh_tokens.xml"/>
+	<include file="db/changelog/changes/011_create_initial_admin.xml"/>
+	
+</databaseChangeLog>

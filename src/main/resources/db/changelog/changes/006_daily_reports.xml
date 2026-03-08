@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="006-daily-reports" author="founder">
+        <createTable tableName="daily_reports">
+            <column name="id" type="BIGSERIAL">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="school_id" type="BIGINT"/>
+            <column name="report_date" type="DATE"/>
+            <column name="meal_upload_id" type="BIGINT"/>
+            <column name="total_students_estimated" type="INT"/>
+            <column name="hygiene_risk" type="VARCHAR(10)"/>
+            <column name="alert_generated" type="BOOLEAN" defaultValueBoolean="false"/>
+            <column name="remarks" type="TEXT"/>
+            <column name="generated_by" type="VARCHAR(20)" defaultValue="SYSTEM"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+
+        <addUniqueConstraint tableName="daily_reports"
+                             columnNames="school_id, report_date"/>
+    </changeSet>
+</databaseChangeLog>
